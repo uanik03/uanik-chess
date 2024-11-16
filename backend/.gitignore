@@ -1,0 +1,43 @@
+# Binaries for programs and plugins
+*.exe
+*.dll
+*.so
+*.dylib
+*.out
+
+# Logs
+*.log
+
+# Dependency directories
+/vendor/
+
+# Go specific
+*.test
+*.exe
+*.prof
+*.trace
+*.coverprofile
+
+# IDE/editor-specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Build and output directories
+/bin/
+/dist/
+
+# Temporary files
+*.tmp
+*.temp
+
+# Environment files
+.env
+.env.*
+
+
