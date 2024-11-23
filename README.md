@@ -1,1 +1,1 @@
-# uanik-chess-corner
+# uanik-chess
