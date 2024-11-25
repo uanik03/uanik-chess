@@ -1,51 +1,67 @@
 package main
 
 import (
+	"chess-backend/config"
+	"chess-backend/handlers"
 	"chess-backend/internal/api"
+	
 
 	"github.com/gin-gonic/gin"
 
 	"net/http"
 )
 
-
-
 func Logger() gin.HandlerFunc {
 
-    return func(c *gin.Context) {
+	return func(c *gin.Context) {
 
-        // Middleware logic before request
+		// Middleware logic before request
 
-        c.Next()
+		c.Next()
 
-        // Middleware logic after request
+		// Middleware logic after request
 
-    }
+	}
 
 }
 
-
-
 func main() {
 
-    router := gin.Default()
+	router := gin.Default()
 
-    wss := api.NewWebSocketServer()
+	wss := api.NewWebSocketServer()
+	config.Init()
 
-    router.Use(Logger())
+	router.Use(Logger())
 
-    router.GET("/", func(c *gin.Context) {
+	router.GET("/", func(c *gin.Context) {
 
-        c.JSON(http.StatusOK, gin.H{
+		c.JSON(http.StatusOK, gin.H{
 
-            "message": "Hello, Gin with Middleware!",
+			"message": "Hello, Gin with Middleware!",
+		})
 
-        })
+	})
 
-    })
+	router.GET("/ws", wss.HandleWebsocketConnection)
 
-    router.GET("/ws", wss.HandleWebsocketConnection)
+	auth := router.Group("/auth")
+	{
+		auth.GET("/login", handlers.LoginHandler)
 
-    router.Run(":8080")
+	}
+	user := router.Group("/user")
+	{
+		user.GET("/getUser", func(c *gin.Context) {
+
+			c.JSON(http.StatusOK, gin.H{
+
+				"message": "Hello, getuser",
+			})
+
+		})
+	}
+
+	router.Run(":8080")
 
 }
