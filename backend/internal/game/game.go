@@ -1,10 +1,9 @@
 package game
 
 import (
-	
 	"sync"
 
-	"github.com/gorilla/websocket"
+	"github.com/lesismal/nbio/nbhttp/websocket"
 	"github.com/notnil/chess"
 )
 
