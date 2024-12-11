@@ -3,17 +3,17 @@ package game
 import "sync"
 
 type GameManager struct {
-	Games map[string]*Game
+	Games map[uint]*Game
 	Mutex sync.Mutex 
 }
 
 func NewGameManager() *GameManager {
 	return &GameManager{
-		Games: make(map[string]*Game),
+		Games: make(map[uint]*Game),
 	}
 }
 
-func (gm *GameManager) GetGame(id string) *Game{
+func (gm *GameManager) GetGame(id uint) *Game{
 	gm.Mutex.Lock()
 	defer gm.Mutex.Unlock()
 
@@ -25,7 +25,7 @@ func (gm *GameManager) GetGame(id string) *Game{
 
 }
 
-func (gm *GameManager) CreateGame(id string) *Game{
+func (gm *GameManager) CreateGame(id uint) *Game{
 	gm.Mutex.Lock()
 	defer gm.Mutex.Unlock()
 
@@ -36,3 +36,4 @@ func (gm *GameManager) CreateGame(id string) *Game{
 	return gm.Games[id]
 
 }
+
