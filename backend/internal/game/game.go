@@ -1,17 +1,23 @@
 package game
 
 import (
-	"log"
 	"sync"
 
-	"github.com/gorilla/websocket"
+	"github.com/lesismal/nbio/nbhttp/websocket"
 	"github.com/notnil/chess"
 )
 
+type GameUser struct {
+	Socket *websocket.Conn
+	Name   string
+	Role   string
+	UserId uint
+}
 type Game struct {
 	ChessGame *chess.Game
 	Mutex     sync.Mutex
-	Players   map[string]*websocket.Conn
+	Players   map[uint]*GameUser
+	GameId    uint
 }
 
 func NewGame() *Game {
@@ -28,21 +34,12 @@ func (g *Game) ValidateAndMakeMove(move string) (bool, error) {
 	return true, nil
 }
 
-func (g *Game) BroadcastMove(move string) error {
+
+
+func (g *Game) GetValidMoves() ([]*chess.Move , error) {
 	g.Mutex.Lock()
 	defer g.Mutex.Unlock()
+	moves := g.ChessGame.ValidMoves()
 
-	for role, conn := range g.Players {
-		if err := conn.WriteJSON(move); err != nil {
-			log.Println("Error broadcasting move to", role, ":", err)
-
-			// Close the stale connection
-			conn.Close() 
-			delete(g.Players, role)
-
-			return err
-		}
-	}
-
-	return nil
+	return moves,nil
 }
